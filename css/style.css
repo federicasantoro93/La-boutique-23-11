@@ -42,10 +42,26 @@ strong {
   width: 100%;
 
   background-image: url("https://media.istockphoto.com/photos/fits-perfect-picture-id938463764");
+  background-repeat: no-repeat;
   background-position-y: 35%;
   background-size: cover;
 
   filter: contrast(1.4) sepia(0.2);
+}
+
+.overlay.second__background{
+  background-image: url("https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
+
+}
+
+.overlay.third__background{
+  background-image: url("https://images.unsplash.com/photo-1621261027519-a71ac66d5a68?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80");
+
+}
+
+.overlay.fist__background{
+  background-image: url("https://images.unsplash.com/photo-1603912699214-92627f304eb6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80");
+
 }
 
 .wrapper .__hero {
