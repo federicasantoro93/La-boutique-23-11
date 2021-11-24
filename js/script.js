@@ -1,10 +1,27 @@
-function createProduct(parent, imgUrl, productTitle, textPrice) {
+function setCartProductsNum() {
+  cartProductsNum.textContent = `Numero prodotti: ${cartList.length}`;
+}
+
+function createProduct(parent, imgUrl, productTitle, textPrice, idProduct) {
   const product = document.createElement("div");
   product.className = "product";
+  product.setAttribute("id", idProduct);
 
   createImg(product, imgUrl, productTitle);
   createText(product, productTitle, textPrice);
   parent.appendChild(product);
+
+  product.addEventListener("click", (e) => {
+    cartList.push(
+      productsList.find(
+        (product) => parseInt(e.currentTarget.id) === product.id
+      )
+    );
+    setCartProductsNum();
+    alert(`Prodotto aggiunto al carrello, numero prodotti: ${cartList.length}`);
+    // Nel caso in cui volessimo aggiungere una interazione col LocalStorage
+    localStorage.setItem("totCartitems", cartList.length);
+  });
 }
 
 function createImg(parent, imgUrl, productTitle) {
@@ -25,18 +42,15 @@ function createText(parent, productTitle, textPrice) {
   parent.append(title, price);
 }
 
-// fetch("https://fakestoreapi.com/products") // <== importare la lista prodotti in modo remoto
-//   .then((response) => response.json())
-//   .then((data) => {
-//     products = data;
-//     renderProducts();
-//   });
-
-const wrapperProducts = document.querySelector(".wrapper__products");
-
 function renderProducts(listItems) {
   listItems.map((product) => {
-    createProduct(wrapperProducts, product.image, product.title, product.price);
+    createProduct(
+      wrapperProducts,
+      product.image,
+      product.title,
+      product.price,
+      product.id
+    );
   });
 }
 
@@ -44,58 +58,33 @@ function renderProducts(listItems) {
 const getProductsList = async () => {
   const res = await fetch("https://fakestoreapi.com/products");
   const data = await res.json();
+  productsList = data;
+
+  // Nella eventualità di aggiungere una quantità per prodotto
+  // productsList = data.map((product) => {
+  //   product.quantity = 0;
+  //   return product;
+  // });
 
   return renderProducts(data);
 };
 
+let productsList = [];
+const wrapperProducts = document.querySelector(".wrapper__products");
+
+// Parte inerente alla logica del carrello
+let cartList = [];
+
+const localStorageTot = localStorage.getItem("totCartitems");
+const cartBtn = document.querySelector(".cartBtn");
+const cartProductsNum = document.querySelector(".cartProductsNum");
+const clearCartBtn = document.querySelector(".clearCart");
+
+// Flusso generale
+cartProductsNum.textContent = `Numero prodotti: ${localStorageTot}`;
 getProductsList();
 
-
-
-
-const bgWrapper = document.querySelector(".overlay");
-
-const f = bgWrapper.classList.contains("overlay");
-
-
-console.log('is contained? ' + f);
-
-  
-var urls = [
-  'url(https://images.unsplash.com/photo-1603912699214-92627f304eb6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80)',
-  'url(https://images.unsplash.com/photo-1573879500655-98f2012dd1db?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)',
-  'url(https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80)',
-  
- 
-];
-
-
-const interval = setInterval(() => {
-  var active = Math.floor(Math.random() * (urls.length));
-  const bgWrapper = document.querySelector(".overlay");
-  bgWrapper.style.background = urls[active];
-     active++;
-     if (active == urls.length) {active = 0;}
-}, 3000);
-
-/*
-var urls = [
-  'url(http://placekitten.com/g/150/150)',
-  'url(http://placekitten.com/g/200/200)',
-  'url(http://placekitten.com/g/250/250)',
-  'url(http://placekitten.com/g/300/300)',
-  'url(http://placekitten.com/g/350/350)',
-  'url(http://placekitten.com/g/400/400)',
-  'url(http://placekitten.com/g/450/450)'
-];
-var active = Math.floor(Math.random() * (urls.length));
-setInterval(function() {
-  const bgWrapper = document.querySelector(".overlay");
-  let logos = document.querySelectorAll('.logo');
-  logos.forEach(function(item) {
-     item.style.background = urls[active];
-     active++;
-     if (active == urls.length) active = 0;
-  })
-}, 2000);
-*/
+clearCartBtn.addEventListener("click", () => {
+  cartList.length = 0;
+  setCartProductsNum();
+});
